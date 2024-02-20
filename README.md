@@ -1,4 +1,59 @@
-## OneRel: Joint Entity and Relation Extraction with One Model in One Step
+An adaptation of `taishan1994/OneRel_chinese`, summarised from the discussions in the issue section.
+
+## Changes:
+1. revised the data loader to ensure if a sentence triple is not correctly processed, it will be skipped.
+
+## Common issues:
+1. If the F1 is 0.000, train more epoch. Depending on the size of the dataset. Sometimes, it takes  more than 100 epoch training before seeing performance improvements.
+
+## Run this code.
+This code is semi-automatic. There are several things to change before executing.
+1. Add your model to the `pre_trained_bert` folder. The pretrained model can be downloaded from huggingface.
+	For example, if using "scibert_scivocab_cased" as the pre-defined bert model. Then the file structure should be `pre_trained_bert/scibert_scivocab_cased`. There should be at least three files, including the bin file, config.json, vocab.txt, in the directory.
+2. change the model path in `models/rel_model.py`
+   e.g. 
+   > self.bert_encoder = BertModel.from_pretrained('./pre_trained_bert/scibert_scivocab_cased', local_files_only=True) 
+   Note if run in internal server which do not have access to the internet, specify local_files_only.
+3. change the model vocabulary path in `data_loader.py`
+   e.g.
+   > tokenizer = get_tokenizer('pre_trained_bert/scibert_scivocab_cased/vocab.txt')
+4. Put data in the right directory. e.g. `data/datasetX`
+   DatasetX should contain `train/dev/test_triples.json`, as well as a `rel2id.json`
+5. change the number of relationships in `data_loader.py`
+   e.g.
+   > batch_triple_matrix = torch.LongTensor(cur_batch_len, 16, max_text_len, max_text_len).zero_()
+   # "16" is the number of total relationships, which can be found in the `data/datasetX/rel2id.json` file.
+5. create a new directory for checkpoints.
+   e.g. `checkpount/datasetX`
+5. Execution
+   > python train.py --dataset=corpus3  --batch_size=2 --max_epoch=500 --rel_num=16 --max_len=1500 
+   # if `--batch_size>=2" it might require more than 16GB memory. 
+   # `--max_epoch` at least 100 for a regular sized (number of train sentences ~ 500)  dataset to ensure there are valid outputs.
+## If run on an internal server.
+   1. ensure the model is loaded from local files by doing:
+    a) revise the model loading script
+      > self.bert_encoder = BertModel.from_pretrained('./pre_trained_bert/scibert_scivocab_cased', local_files_only=True)
+    b) ensure the script is executed from a local environment
+      > export TF_ENABLE_ONEDNN_OPTS=0
+        export HF_DATASETS_OFFLINE=1
+        export TRANSFORMERS_OFFLINE=1
+        export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128 # Adjust to manage memory fragmentation
+        python train.py --dataset=corpus3  --batch_size=2 --max_epoch=500 --rel_num=16 --max_len=1500
+    c) if batch_size > 2, make sure you have enough memory, and use `--multi-gpu` when needed.
+    d) given not all servers have the most up-to-date software, and the compatiablity issues. Below is a set of configurations which are old but executable. 
+       ```
+       torch                     1.11.0                   pypi_0    pypi
+       tqdm                      4.66.1                   pypi_0    pypi
+       transformers              4.5.1                    pypi_0    pypi
+       tensorflow                2.8.0                    pypi_0    pypi
+       keras                     2.8.0                    pypi_0    pypi 
+       keras-bert                0.88.0                   pypi_0    pypi
+       ```
+
+
+
+## Below are from the original project description
+ OneRel: Joint Entity and Relation Extraction with One Model in One Step
 
 This repository contians the source code and datasets for the paper: **OneRel: Joint Entity and Relation Extraction with One Model in One Step**, Yu-Ming Shang, Heyan Huang and Xian-Ling Mao, AAAI-2022.
 
@@ -50,7 +105,7 @@ To reproduce the performance of the paper, please download our model states [her
 
 
 ## **Acknowledgment**
-
+I 
 I followed the previous work of [longlongman](https://github.com/longlongman/CasRel-pytorch-reimplement) and [weizhepei](https://github.com/weizhepei/CasRel). 
 
 So, I would like to express my sincere thanks to them. 
