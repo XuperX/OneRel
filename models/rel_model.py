@@ -1,15 +1,14 @@
 from torch import nn
 from transformers import *
 import torch
-
+import oneRel_config
 
 class RelModel(nn.Module):
     def __init__(self, config):
         super(RelModel, self).__init__()
         self.config = config
         self.bert_dim = config.bert_dim
-        # self.bert_encoder = BertModel.from_pretrained("..bert-base-chinse", cache_dir='./pre_trained_bert')
-        self.bert_encoder = BertModel.from_pretrained("./pre_trained_bert/")
+        self.bert_encoder = BertModel.from_pretrained('./pre_trained_bert/scibert_scivocab_cased', local_files_only=True)
         self.relation_matrix = nn.Linear(self.bert_dim * 3, self.config.rel_num * self.config.tag_size)
         self.projection_matrix = nn.Linear(self.bert_dim * 2, self.bert_dim * 3)
 

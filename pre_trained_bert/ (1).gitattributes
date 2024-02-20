@@ -1,0 +1,11 @@
+models--bert-base-cased filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/flax_model.msgpack filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/pytorch_model.bin filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/requirements.txt filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/tokenizer.json filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/vocab.txt filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/README.md filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/config.json filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/model.safetensors filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/tf_model.h5 filter=lfs diff=lfs merge=lfs -text
+models--bert-base-cased/tokenizer_config.json filter=lfs diff=lfs merge=lfs -text

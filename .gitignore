@@ -1,0 +1,15 @@
+data/corpus3/*
+checkpoints/corpus3/*
+data/Corpus*
+result/corpus3
+venv/
+*.pyc
+*.ipynb_checkpoints/
+*.log
+temp/
+.idea/
+log/corpus3/
+log/CorpusV3
+
+
+

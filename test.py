@@ -6,6 +6,8 @@ import os
 import torch
 import numpy as np
 import random
+import json
+import oneRel_config
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -40,11 +42,21 @@ args = parser.parse_args()
 con = config.Config(args)
 
 fw = framework.Framework(con)
+"""TODO
+# a lazy way to avoid putting in relationship_numbers everytime.
+rel_json_file = os.path.join("data", args.dataset, "rel2id.json")
+with open(rel_json_file, "r") as f:
+    rel2id = json.load(f)
+    globals.rel_len = len(rel2id[0])
+args.rel_num = globals.rel_len
+"""
+# set training parameters such as which bert, rel_numer and etc.
+#oneRel_config.initialize_config(args.bert_model, args.dataset)
 
 model = {
     'OneRel': models.RelModel
 }
 
-model_name = "OneRel_DATASET_DUIE_LR_1e-05_BS_4Max_len100Bert_ML200DP_0.2EDP_0.1"
+model_name = "OneRel"
 
 fw.testall(model[args.model_name], model_name)
