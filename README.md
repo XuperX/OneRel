@@ -29,6 +29,8 @@ This code is semi-automatic. There are several things to change before executing
 5. create a new directory for checkpoints.
    e.g. `checkpount/datasetX`
 5. Execution
+   ** The `jobscript_colab` file can be executed automatically. ** Though it is not a very clean script.
+
    > python train.py --dataset=corpus3  --batch_size=2 --max_epoch=500 --rel_num=16 --max_len=1500 
    > #if `--batch_size>=2" it might require more than 16GB memory. 
    > #`--max_epoch` at least 100 for a regular sized (number of train sentences ~ 500)  dataset to ensure there are valid outputs.
