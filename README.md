@@ -11,23 +11,29 @@ This code is semi-automatic. There are several things to change before executing
 1. Add your model to the `pre_trained_bert` folder. The pretrained model can be downloaded from huggingface.
 	
  For example, if using "scibert_scivocab_cased" as the pre-defined bert model. Then the file structure should be `pre_trained_bert/scibert_scivocab_cased`. There should be at least three files, including the bin file, config.json, vocab.txt, in the directory.
+ 
 2. change the model path in `models/rel_model.py`
    e.g. 
    > self.bert_encoder = BertModel.from_pretrained('./pre_trained_bert/scibert_scivocab_cased', local_files_only=True) 
    
    Note if run in internal server which do not have access to the internet, specify local_files_only.
-3. change the model vocabulary path in `data_loader.py`
+   
+4. change the model vocabulary path in `data_loader.py`
    e.g.
    > tokenizer = get_tokenizer('pre_trained_bert/scibert_scivocab_cased/vocab.txt')
-4. Put data in the right directory. e.g. `data/datasetX`
+   
+5. Put data in the right directory. e.g. `data/datasetX`
 
    DatasetX should contain `train/dev/test_triples.json`, as well as a `rel2id.json`
-6. change the number of relationships in `data_loader.py`
+   
+7. change the number of relationships in `data_loader.py`
    e.g.
    > batch_triple_matrix = torch.LongTensor(cur_batch_len, 16, max_text_len, max_text_len).zero_()
    #"16" is the number of total relationships, which can be found in the `data/datasetX/rel2id.json` file.
+   
 5. create a new directory for checkpoints.
    e.g. `checkpount/datasetX`
+   
 5. Execution
    ** The `jobscript_colab` file can be executed automatically. ** Though it is not a very clean script.
 
